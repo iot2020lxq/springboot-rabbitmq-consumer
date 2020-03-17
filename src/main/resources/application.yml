@@ -1,0 +1,31 @@
+#整合rabbitmq
+spring:
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: iot
+    password: 123
+    virtual-host: /iot
+    connection-timeout: 15000
+    listener:
+      simple:
+        acknowledge-mode: manual  #设置手动签收
+        concurrency: 5
+        max-concurrency: 10
+#        retry:
+#          enabled: true          #开启消费者重试
+#          max-attempts: 5        #最大重试次数
+#          initial-interval: 3000 #重试间隔为3秒
+      order:
+        queue:
+          name: emailOrderQueue_topic
+          durable: true
+        exchange: 
+          name: TOPIC_EXCHANGE  
+          type: topic
+          durable: true
+          ignoreDeclarationExceptions: true
+        key: topicEmailOrder.*
+
+server:
+  port: 8081
